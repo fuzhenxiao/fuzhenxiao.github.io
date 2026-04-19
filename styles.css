@@ -203,14 +203,7 @@ p {
   display: flex;
   justify-content: flex-end;
   margin-top: 18px;
-}
-
-.visitor-map-scale {
-  width: 180px;
-  height: 110px;
   overflow: hidden;
-  transform: scale(0.34);
-  transform-origin: top right;
 }
 
 @media (max-width: 700px) {
