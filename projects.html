@@ -22,16 +22,64 @@
       <main class="section">
         <div class="single-column">
           <h1>Recent Projects</h1>
-          <h2>QASM-Eval</h2>
+          <h2 class="project-heading">QASM-Eval</h2>
           <p>
-            QASM-Eval is a dataset for training and evaluating LLMs on OpenQASM 3
-            beyond quantum circuits. Rather than concentrating on quantum-algorithm
-            design, it targets the hardware-facing language features needed for NISQ
-            workflows: classical logic, timing and scheduling, pulse control, and
-            complex real-world programming tasks. The release includes 4,000 training
-            tasks and an expert-verified 100-task test set, along with an extended
-            verifier for syntax, quantum-state, and program-timeline correctness.
+            QASM-Eval is a dataset for training and evaluating LLMs on
+            hardware-facing quantum programming with OpenQASM 3. It focuses on capabilities
+            that matter in near-term quantum workflows, including timing-aware
+            programming, classical control, pulse-level operations, and mixed
+            workflows that combine these elements in a single program.
           </p>
+          <p class="spaced-paragraph">
+            The project brings together a training dataset, a benchmark, and
+            simulation-based verification to support the development of reliable
+            LLM assistants for quantum programming.
+          </p>
+          <p class="spaced-paragraph">
+            Two models fine-tuned on QASM-Eval are available on Hugging Face:
+            <a href="https://huggingface.co/AnonymousORG01/Llama-3.1-8B-Instruct-QASM-Eval" target="_blank" rel="noopener noreferrer">Llama-3.1-8B-Instruct-QASM-Eval</a>
+            and
+            <a href="https://huggingface.co/AnonymousORG01/Llama-3.3-70B-Instruct-QASM-Eval" target="_blank" rel="noopener noreferrer">Llama-3.3-70B-Instruct-QASM-Eval</a>.
+          </p>
+          <h3>Project Overview</h3>
+          <p>
+            QASM-Eval explores code generation beyond static gate-level circuits,
+            covering advanced OpenQASM 3 features that connect quantum algorithms
+            to hardware behavior. Its tasks assess how well models translate
+            natural-language requirements into code within a surrounding quantum
+            program.
+          </p>
+          <p class="spaced-paragraph">
+            The dataset covers four domains, with training and test examples
+            distributed evenly across them:
+          </p>
+          <table class="readme-table">
+            <thead>
+              <tr>
+                <th>Dataset</th>
+                <th>Records</th>
+                <th>Domain composition</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Training pool</td>
+                <td>4,000</td>
+                <td>1,000 timing, 1,000 classical, 1,000 pulse, 1,000 complex</td>
+              </tr>
+              <tr>
+                <td>Test</td>
+                <td>1,200</td>
+                <td>300 timing, 300 classical, 300 pulse, 300 complex</td>
+              </tr>
+            </tbody>
+          </table>
+          <ul>
+            <li><strong>Timing:</strong> delays, durations, scheduling constraints, and program timelines.</li>
+            <li><strong>Classical control:</strong> measurement, bits, registers, and conditional logic.</li>
+            <li><strong>Pulse control:</strong> frames, waveforms, and pulse-level calibration.</li>
+            <li><strong>Complex workflows:</strong> tasks combining quantum gates, timing, pulse control, and classical logic.</li>
+          </ul>
           <p class="spaced-paragraph">
             <a
               href="https://github.com/fuzhenxiao/QASM-Eval"
@@ -44,18 +92,52 @@
               target="_blank"
               rel="noopener noreferrer"
             >Hugging Face Dataset</a>
+            &nbsp;|&nbsp;
+            <a
+              href="https://arxiv.org/abs/2605.30358"
+              target="_blank"
+              rel="noopener noreferrer"
+            >Paper</a>
           </p>
 
-          <h2 class="spaced-paragraph">QAgent</h2>
+          <h2 class="project-heading">QAgent</h2>
           <p>
             QAgent is a multi-agent framework for autonomous OpenQASM programming.
-            It combines schema-aware planning and correction, task routing between
-            guided few-shot and tools-augmented coding agents, retrieval-augmented
-            generation, and automatic quantum-hardware calibration. Its collaborative
-            workflow turns high-level requests into OpenQASM programs and structured
-            reports, with iterative simulation, testing, review, and refinement to
-            improve code correctness.
+            It turns high-level user requests into quantum programs by combining
+            task planning, specialized coding agents, retrieval-augmented generation,
+            and hardware calibration. The project explores how collaborating LLM
+            agents can support the full workflow from a programming goal to
+            validated OpenQASM code.
           </p>
+          <h3>Contributions</h3>
+          <ol>
+            <li><strong>Schema-aware planning and correction for quantum modules.</strong> A two-part planning agent (Planner + Criticizer) transforms high-level user goals into task graphs with schema-based validation and automatic corrections.</li>
+            <li><strong>Agent routing strategy for OpenQASM generation.</strong> A routing mechanism assigns tasks to specialized coding agents&mdash;Guided Few-Shot Agent and Tools-Augmented Agent&mdash;based on quantum task complexity and the capability of LLM base models.</li>
+            <li><strong>Automatic quantum hardware calibration.</strong> A Calibration Agent generates or edits device-specific calibration scripts, bridging high-level user intent with real-device execution constraints.</li>
+            <li><strong>End-to-end workflow with structured reporting.</strong> Comprehensive reporting consolidates schemas, chosen strategies, calibration results, and generated OpenQASM code.</li>
+          </ol>
+          <h3>Workflow Overview</h3>
+          <p>Specialized agents work together across planning, code generation, and calibration:</p>
+          <ul>
+            <li><strong>Plan Agent:</strong> breaks a request into quantum kernels and refines an initial plan into a graph with validated parameters.</li>
+            <li><strong>Calibration Agent:</strong> calibrates quantum backends based on the user's request.</li>
+            <li><strong>Guided Few-Shot Coding Agent:</strong> handles common, well-structured kernels and uses a test-reflection loop.</li>
+            <li><strong>Tools-Augmented Coding Agent:</strong> handles complex or novel kernels that require additional tools, using testing and reflection to refine the code.</li>
+            <li><strong>Retrieval-Augmented Generation Module (RAG):</strong> provides examples, schemas, and tools from the database to support planning and execution.</li>
+          </ul>
+          <p class="spaced-paragraph">
+            The final output is a set of OpenQASM scripts and reports tailored to
+            user requirements.
+          </p>
+          <h3>Coding Agent Workflow Loop</h3>
+          <ol>
+            <li>The Advisor provides guidance and high-level strategies for code generation.</li>
+            <li>The Coder writes the corresponding OpenQASM code.</li>
+            <li>The code is executed via simulation and testing.</li>
+            <li>A structured report is generated with results and feedback.</li>
+            <li>The Reviewer examines the output. If it is correct, the workflow proceeds; otherwise, the reviewer provides feedback to the coder.</li>
+            <li>The Coder refines or rewrites the code.</li>
+          </ol>
           <p class="spaced-paragraph">
             <a
               href="https://github.com/fuzhenxiao/QAgent"
@@ -69,6 +151,7 @@
               rel="noopener noreferrer"
             >Paper</a>
           </p>
+
         </div>
       </main>
     </div>
